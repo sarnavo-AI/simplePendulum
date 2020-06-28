@@ -58,8 +58,8 @@ function animate() {
 
     // main calculation of Simple Pendulum
     AngularAcc = g * Math.sin(angleRadian) / length;
-    AngularRate += AngularAcc / 3;
-    angleRadian -= AngularRate / 3;
+    AngularRate += AngularAcc / 3.2;
+    angleRadian -= AngularRate / 3.2;
 
     // Damping
     AngularRate *= 0.9997;
