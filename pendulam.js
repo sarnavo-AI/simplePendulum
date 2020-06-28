@@ -108,14 +108,86 @@ document.getElementById('go').addEventListener('click', function() {
 
     window.cancelAnimationFrame(cancelReq);
     animate();
+
+    watch.reset();
+    watch.stop();
+    watch.start();
+
 });
 
 document.getElementById('pause').addEventListener('click', function() {
     window.cancelAnimationFrame(cancelReq);
+    watch.stop();
 });
 
 document.getElementById('play').addEventListener('click', function() {
     window.cancelAnimationFrame(cancelReq);
     animate();
+    watch.start();
 });
 
+
+var StopWatch = function () {
+
+    var initTime = 0;
+    var tempTime = 0;
+    var totalTime = 0;
+    var cancelInterval;
+
+    var update = function() {
+        tempTime = Date.now();
+        totalTime += (tempTime - initTime);
+        initTime = tempTime;
+        format();
+    }
+
+    var format = function () {
+        var time = new Date(totalTime);
+        var milliSec;
+        var sec;
+        var min;
+        var hr;
+
+        milliSec = time.getMilliseconds();
+        sec = time.getSeconds();
+        min = time.getMinutes();
+        hr = time.getHours();
+        hr = hr - 16;
+
+        if(min < 10) {
+            min = '0' + min;
+        }
+
+        if(sec < 10) {
+            sec = '0' + sec;
+        }
+        if(hr < 10) {
+            hr = '0' + hr;
+        }
+
+        if(milliSec < 10) {
+            milliSec = '00' + milliSec;
+        }
+
+        if(milliSec < 100) {
+            milliSec = '0' + milliSec;
+        }
+
+        document.getElementById('timeSpan').innerHTML = (/*hr + ' : ' + */min + ' : ' + sec + ' . ' + milliSec);
+    }
+
+    this.start = function() {
+        initTime = Date.now();
+        cancelInterval = setInterval(update, 10);
+    }
+
+    this.stop = function() {
+        clearInterval(cancelInterval);
+    }
+
+    this.reset = function() {
+        totalTime = 0;
+    }
+}
+
+var watch = new StopWatch();
